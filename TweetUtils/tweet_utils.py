@@ -1,17 +1,20 @@
-import copy
-import traceback
+# import copy
+# import traceback
 from threading import Thread
 import datetime
 from TweetUtils.cleaning.TextCleaner import TextCleaner
 from TweetUtils.feature_extraction.TextTagger import TextTagger
 from TweetUtils.helpers.Exceptions import InvalidConfiguration
 from TweetUtils.models.Config import Config
-from TweetUtils.models.Options import FeatureOption
 from TweetUtils.models.Tweet import Tweet
 import concurrent.futures
-from multiprocessing import Pool
-from time import sleep
-from TweetUtils.helpers.globals import g
+# from TweetUtils.models.Options import FeatureOption
+# from multiprocessing import Pool
+# from time import sleep
+# from TweetUtils.helpers.globals import g
+
+__author__ = 'maria'
+
 
 __author__ = 'maria'
 
@@ -31,6 +34,10 @@ class TweetUtils(object):
         self.results = None
         self.text_tagger = None
         self.text_cleaner = None
+        self.input_file_path = None
+        self.output_file_path = None
+        self.delimiter = None
+        self.include_original = True
         self.THREAD_LIST = []
 
     def process(self, tweet_list_or_text,
@@ -51,40 +58,27 @@ class TweetUtils(object):
         :return: results: list of Tweet objects
         """
         self.results = []
+        self.input_file_path = input_file_path
         self.output_file_path = output_file_path
         self.delimiter = delimiter
         self.include_original = include_original
 
-        if input_file_path is not None and input_file_path is not None:
-
-            with open(input_file_path, 'rb') as in_file:
-                all_lines = in_file.readlines()
-                executor = concurrent.futures.ProcessPoolExecutor(self.configuration.num_of_threads)
-                futures = [executor.submit(self.test, item) for item in all_lines]
-                concurrent.futures.wait(futures)
-
-                for line in in_file.readlines():
-                    self.results.append(self._process(line.strip('\n').strip('\r')))
-
-            with open(self.output_file_path, 'a') as out_file:
-                for each in self.results:
-                    if self.include_original:
-                        out_file.write(each.text.strip("\n").strip("\r")
-                                       + self.delimiter
-                                       + " ".join(each.words)
-                                       + self.delimiter
-                                       + str(each.feature_dict) + "\n")
-                    else:
-                        out_file.write(str(each.feature_dict) + "\n")
+        if self.input_file_path is not None and self.output_file_path is not None:
+            import os
+            if not os.path.isfile(self.input_file_path):
+                raise IOError("Input file path is not correct!")
+            # if not os.path.isfile(self.output_file_path):
+            #     raise IOError("Output file path is not correct!")
+            self._read_input_file_contents()
+            self._write_results_to_file()
 
         else:
-
             if type(tweet_list_or_text) is list:
                 self.tweet_list = tweet_list_or_text
                 i = 0
                 for tweet_text in self.tweet_list:
                     self.results.append(self._process(tweet_text))
-                    i+=1
+                    i += 1
                     if i % 10 == 0:
                         print i, datetime.datetime.now()
             elif type(tweet_list_or_text) is str:
@@ -93,6 +87,28 @@ class TweetUtils(object):
             else:
                 raise InvalidConfiguration("Wrong parameter types for function")
         return self.results
+
+    def _read_input_file_contents(self):
+        with open(self.input_file_path, 'rb') as in_file:
+            all_lines = in_file.readlines()
+            executor = concurrent.futures.ProcessPoolExecutor(self.configuration.num_of_threads)
+            futures = [executor.submit(self.test, item) for item in all_lines]
+            concurrent.futures.wait(futures)
+
+            for line in in_file.readlines():
+                self.results.append(self._process(line.strip('\n').strip('\r')))
+
+    def _write_results_to_file(self):
+        with open(self.output_file_path, 'a') as out_file:
+            for each in self.results:
+                if self.include_original:
+                    out_file.write(each.text.strip("\n").strip("\r")
+                                   + self.delimiter
+                                   + " ".join(each.words)
+                                   + self.delimiter
+                                   + str(each.feature_dict) + "\n")
+                else:
+                    out_file.write(str(each.feature_dict) + "\n")
 
     def test(self, line):
         self.results.append(self._process(line.strip('\n').strip('\r')))
@@ -158,7 +174,6 @@ class TweetUtils(object):
                         else:
                             tweet.extra_features.append(each.function(tweet.text))
 
-
             else:
                 raise Exception("Not suitable data type {0}".format(type(tweet_text)))
             return tweet
@@ -200,7 +215,8 @@ def pre_clean_function(text):
 def post_clean_function(text):
     print "post_clean_function", text
     return "new post-clean feature added"
-#
+
+
 # if __name__ == "__main__":
 #
 #     # examples
