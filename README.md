@@ -1,6 +1,7 @@
 # tweet-utils
-##HOW TO and useful information
-###Simple Example
+HOW TO and useful information
+---
+### Simple Example
 ```python
 from TweetUtils import TweetUtils
 from TweetUtils.models.Config import Config
@@ -38,6 +39,49 @@ utils = TweetUtils(utils_cfg)
 tweet_list = utils.process(["This is lovely!!!#NOT", "I hate Monday mornings..."])
 single_tweet = utils.process("This is lovely!!!#NOT")
 
+```
+
+### Multiprocessing example
+Since tweets are independend of each other (at least in simple cases), we can parallelize the processing.
+A simple example would be something like this:
+
+```python
+# create a function to be executed by each process
+def process(tweet_tuple):
+    global processed
+    try:
+        # create a TweetUtils instance and process the tweet
+        utils = TweetUtils(Config(True, True))
+        tweet = utils.process(tweet_tuple[1].strip())
+        # update the tweet in database
+        mysql_conn.update(q_update.format(str(tweet.feature_dict), tweet_tuple[0]))
+    except:
+        # something went wrong, log it
+        print tweet_tuple
+        logger.error(tweet_tuple)
+
+    processed += 1
+    # print process every 1000 of tweets
+    if processed % 1000 == 0:
+        print processed, datetime.datetime.now()
+
+if __name__ == "__main__":
+    # keep a global count to know how things are going
+    processed = 0
+
+    # This is a very simple example that just fetches tweets from a MySQL
+    # with raw SQL queries, to feed them to the processing module
+    # and update the database with the results.
+    # set the queries to retrieve and update the tweets
+    q ="SELECT id, text FROM TweetDb.tweet_data;"
+    q_update = """UPDATE TweetDb.tweet_data SET feature_dict="{0}" WHERE id="{1}";"""
+
+    data = mysql_conn.execute_query(q)        # get the tweets
+    print "start", datetime.datetime.now()
+    pool = Pool(processes=2)
+    pool.map(process, data)                     # begin
+    print processed
+    print "finished", datetime.datetime.now()
 ```
 
 ## Furure Work
