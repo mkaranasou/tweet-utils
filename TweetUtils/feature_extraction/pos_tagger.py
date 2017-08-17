@@ -1,5 +1,3 @@
-__author__ = 'maria'
-
 import traceback
 
 import nltk
@@ -36,7 +34,6 @@ class POSTagger(object):
         self.bigram_pos_tagger()
 
         return self.tweet.pos_tagged_text
-    # ================================================= POS TAGGING ================================================== #
 
     def pos_tag_words(self):
         """
