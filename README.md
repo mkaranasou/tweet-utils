@@ -1,7 +1,8 @@
 # tweet-utils
-A library to help with the feature extraction process on tweets for the purpose of Sentiment Analysis.
+A library to help with the feature extraction process on tweets for the purpose of Sentiment Analysis as a part of my Thesis
+and SemEval Task 11 (http://alt.qcri.org/semeval2015/cdrom/pdf/SemEval120.pdf)
 
-HOW TO and useful information
+HOW TO
 ---
 ### Simple Example
 ```python
