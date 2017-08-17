@@ -12,7 +12,6 @@ tweet_list = utils.process(["This is lovely!!!#NOT", "I hate Monday mornings..."
 single_tweet = utils.process("This is lovely!!!#NOT")
 ```
 ### Adding Features Example
-#### This works like callbacks in Javascript
 ```python
 from TweetUtils import TweetUtils
 from TweetUtils.models.Config import Config
