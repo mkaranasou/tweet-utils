@@ -9,9 +9,6 @@ from nltk import sent_tokenize
 from TweetUtils.helpers.globals import g
 
 
-__author__ = 'maria'
-
-
 class TextCleaner(object):
     """
     Responsible for the cleaning of a Tweet
