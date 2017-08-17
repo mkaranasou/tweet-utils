@@ -1,4 +1,6 @@
 # tweet-utils
+A library to help with the feature extraction process on tweets for the purpose of Sentiment Analysis.
+
 HOW TO and useful information
 ---
 ### Simple Example
