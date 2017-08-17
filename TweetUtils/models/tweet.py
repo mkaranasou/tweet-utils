@@ -1,9 +1,9 @@
 import re
 from nltk.corpus import wordnet
-from TweetUtils.feature_extraction.PriorPolarity import PriorPolarity
+from TweetUtils.feature_extraction.priorpolarity import PriorPolarity
 from TweetUtils.helpers.pyenchant_spell_checker import EnchantSpellChecker
-from TweetUtils.feature_extraction.POSTagger import POSTagger
-from TweetUtils.feature_extraction.SemanticAnalyser import SemanticAnalyzer
+from TweetUtils.feature_extraction.postagger import POSTagger
+from TweetUtils.feature_extraction.semanticanalyser import SemanticAnalyzer
 from TweetUtils.helpers.globals import g
 
 
@@ -12,7 +12,8 @@ __author__ = 'maria'
 
 class Tweet(object):
     """
-
+    Represents a tweet and holds the basic extracted characteristics for sentiment analysis, like prior polaity,
+    PoS tags, clean tweet etc.
     """
     def __init__(self, id_, text, text_tagger, text_cleaner, train=0, clean_text=None):
         self.id = id_
@@ -54,6 +55,7 @@ class Tweet(object):
         return self.text
 
     def tag(self):
+        """ PoS tag"""
         self.tagged_text = self.tagger.tag_text(self.text)
         self.tags = self.tagger._tags
 
@@ -72,6 +74,10 @@ class Tweet(object):
         g.logger.debug("POS-TAGS: %s" % self.pos_tagged_text)
 
     def get_simple_pos_for_swn(self, word):
+        """ Simplify PoS categories to the four major categories:
+        NOUNS, VERBS, ADVERBS, ADJECTIVES
+        Used to construct the SWN query.
+        """
         if self.pos_tagged_text[word] in g.NOUNS:
             return ' and Category = "n" '
         elif self.pos_tagged_text[word] in g.VERBS:
@@ -108,6 +114,10 @@ class Tweet(object):
         self.prior_polarity_calc.get_total()
 
     def get_semantic_similarity(self, type_):
+        """
+        Calculate the semantic similarity 
+        as described in http://alt.qcri.org/semeval2015/cdrom/pdf/SemEval120.pdf
+        """
         similarity = 0.0
         nouns = []
         verbs = []
@@ -156,6 +166,9 @@ class Tweet(object):
         return self.words_dict
 
     def gather_dicts(self):
+        """
+        Gather all features in feature_dict
+        """
         self.feature_dict = dict(self.swn_score_dict.items() +
                                  self.tags.items() +
                                  self.pos_tagged_text.items() +
