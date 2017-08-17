@@ -4,6 +4,9 @@ __author__ = 'maria'
 
 
 class Options(object):
+    """
+    Base for options config
+    """
     def __init__(self, defaults=True):
         self.defaults = defaults
 
@@ -62,7 +65,7 @@ class FeatureOption(Option):
 
 class CleaningOptions(Options):
     """
-    What to remove from tweet
+    Configuration for what to remove from a tweet.
     """
     cleaning_features = None
 
@@ -99,6 +102,9 @@ class CleaningOptions(Options):
 
 
 class FeatureOptions(Options):
+    """
+    Configuration on what to extract from a tweet.
+    """
     FeatureDataType = Globals.enum(Boolean=0, BooleanText=1, Decimal=2, Text=3)
     FeatureTypes = Globals.enum(Morphological=0, Figurative=1, PriorPolarity=2, Others=3)
     MorphFeatures = Globals.enum(__CAPITAL__=0, __HT__=1, __HT_POS__=2, __HT_NEG__=3, __LINK__=4, __POS_SMILEY__=5,
