@@ -1,10 +1,8 @@
 import traceback
-
 import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
 # from nltk.tag.simplify import simplify_wsj_tag DEPRECATED! NLTK 2.0 version
 from nltk.tag import pos_tag, map_tag
-
 
 from TweetUtils.helpers.globals import g
 
