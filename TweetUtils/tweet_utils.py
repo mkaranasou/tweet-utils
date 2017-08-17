@@ -2,26 +2,21 @@
 # import traceback
 from threading import Thread
 import datetime
-from TweetUtils.cleaning.TextCleaner import TextCleaner
-from TweetUtils.feature_extraction.TextTagger import TextTagger
-from TweetUtils.helpers.Exceptions import InvalidConfiguration
-from TweetUtils.models.Config import Config
-from TweetUtils.models.Tweet import Tweet
+from TweetUtils.cleaning.text_cleaner import TextCleaner
+from TweetUtils.feature_extraction.text_tagger import TextTagger
+from TweetUtils.helpers.exceptions import InvalidConfiguration
+from TweetUtils.models.config import Config
+from TweetUtils.models.tweet import Tweet
 import concurrent.futures
 # from TweetUtils.models.Options import FeatureOption
 # from multiprocessing import Pool
 # from time import sleep
 # from TweetUtils.helpers.globals import g
 
-__author__ = 'maria'
-
-
-__author__ = 'maria'
-
 
 class TweetUtils(object):
     """
-
+    TweetUtils performs text cleaning and feature extraction of tweets according to the given configuration.
     """
     def __init__(self, configuration):
         if configuration is None:
