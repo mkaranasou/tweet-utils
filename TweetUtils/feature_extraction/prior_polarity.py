@@ -1,5 +1,4 @@
 from TweetUtils.helpers.globals import g
-__author__ = 'm.karanasou'
 
 
 class PriorPolarity(object):
