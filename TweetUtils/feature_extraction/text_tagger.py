@@ -1,10 +1,7 @@
-__author__ = 'maria'
-
 import re
 import traceback
 from hashtag_handler import HashTagHandler
 
-__author__ = 'maria'
 from TweetUtils.helpers.globals import g
 
 
