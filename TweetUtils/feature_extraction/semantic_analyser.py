@@ -1,12 +1,11 @@
 import traceback
 from nltk.corpus.reader import WordNetError
 
-__author__ = 'maria'
-
 from nltk.corpus import wordnet as wn
 from itertools import product
 from TweetUtils.helpers.globals import g
 from nltk.corpus import wordnet_ic
+
 brown_ic = wordnet_ic.ic('ic-brown.dat')
 semcor_ic = wordnet_ic.ic('ic-semcor.dat')
 
@@ -29,12 +28,12 @@ class SemanticAnalyzer(object):
 
     def get_similarity(self, word1, word2, pos, type_):
         """
-
-        :param word1:
-        :param word2:
-        :param pos:
-        :param type_:
-        :return:
+         Calculate the similarity metric for the two given words.
+        :param word1:str, the first word
+        :param word2:str, the second word
+        :param pos:str, the PoS
+        :param type_:str, similarity type, 'res' for Resnik, 'lin' for Lin, 'path' for Path and 'wup' for Wu-Palmer
+        :return:float, the similarity result
         """
         if type_ == 'res':
             similarity = self.resnik_similarity(word1, word2)
