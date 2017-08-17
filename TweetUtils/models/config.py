@@ -1,6 +1,6 @@
-__author__ = 'maria'
+from TweetUtils.models.options import CleaningOptions, FeatureOptions
 
-from TweetUtils.models.Options import CleaningOptions, FeatureOptions
+__author__ = 'maria'
 
 
 class Config(object):
