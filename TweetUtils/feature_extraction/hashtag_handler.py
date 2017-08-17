@@ -1,8 +1,6 @@
 import nltk
-
-__author__ = 'maria'
-
 import re
+
 from TweetUtils.helpers.globals import g
 import TweetUtils.helpers.pyenchant_spell_checker as sp_ch
 
